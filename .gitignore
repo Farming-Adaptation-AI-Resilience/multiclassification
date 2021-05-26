@@ -1,3 +1,7 @@
-data/
 model/
+data/*
+!data/Sequoia
+data/Sequoia/*
+!data/Sequoia/SequoiaMulti_30
+data/Sequoia/SequoiaMulti_30/*
 !data/Sequoia/SequoiaMulti_30/combine_images.py
