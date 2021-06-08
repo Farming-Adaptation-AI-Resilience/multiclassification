@@ -18,7 +18,18 @@ def space():
 
 
 
-def metrics(y_true,y_pred,jaccard_scores):
+def metrics_f1(y_true,y_pred,f1_scores):
+    f1_scores[0] += f1_score(y_true, y_pred,average='macro')
+    f1_scores[1] += f1_score(y_true, y_pred,average='weighted')
+    '''
+    print('jaccard index macro:')
+    print(jaccard_score(y_true, y_pred,average='macro'))
+    print('jaccard index weighted:')
+    print(jaccard_score(y_true, y_pred,average='weighted'))
+    '''
+    return f1_scores
+
+def metrics_jaccard(y_true,y_pred,jaccard_scores):
     jaccard_scores[0] += jaccard_score(y_true, y_pred,average='macro')
     jaccard_scores[1] += jaccard_score(y_true, y_pred,average='weighted')
     '''
@@ -32,6 +43,7 @@ def metrics(y_true,y_pred,jaccard_scores):
 def read_files(files,pred_dir,gt_folder):
     #for i in files['name']:
     jaccard_scores = [0,0]
+    f1_scores = [0,0]
     num = 0
     for i in files:
         if(i%100 == 0):
@@ -63,7 +75,8 @@ def read_files(files,pred_dir,gt_folder):
         
         #tn, fp, fn, tp = confusion_matrix(y_true, y_pred, labels=[0,60,255]).ravel()
         #print(confusion_matrix(y_true, y_pred, labels=[0,60,255]).ravel())
-        jaccard_scores = metrics(y_true,y_pred,jaccard_scores)
+        jaccard_scores = metrics_jaccard(y_true,y_pred,jaccard_scores)
+        f1_scores = metrics_f1(y_true,y_pred,f1_scores)
         '''
         print('f1_score micro:')
         print(f1_score(y_true, y_pred,average='micro'))
@@ -77,16 +90,27 @@ def read_files(files,pred_dir,gt_folder):
             print(num)
         #    break
     print(num)
+    print('Jaccard scores:')
     print(jaccard_scores)
+    print('Jaccard Macro:')
     print(jaccard_scores[0]/num)
+    print('Jaccard Weighted:')
     print(jaccard_scores[1]/num)
+    print('F1 scores:')
+    print(f1_scores)
+    print('F1 Macro:')
+    print(f1_scores[0]/num)
+    print('F1 Weighted:')
+    print(f1_scores[1]/num)
 
 TN = FP = FN = TP = 0
 epochs = 150
 person = 'Keanu'
 print('Number of files the training set was trained on {}'.format(2400))
 print('Number of epochs for training is {}'.format(epochs))
-predictions = '300_epochs_predictions/4_epochs_predictions/' 
+#predictions = '300_epochs_predictions/4_epochs_predictions/' 
+predictions = '650_epochs_predictions/' 
+print(predictions)
 gt_folder = 'test_partition_ground_truth_visible/'
 files = [int(f.split('.')[0]) for f in listdir(predictions) if isfile(join(predictions, f))]
 files.sort()
