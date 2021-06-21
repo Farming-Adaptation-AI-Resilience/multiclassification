@@ -1,4 +1,5 @@
 model/
+Amazing-Semantic-Segmentation-master/CamVid/*
 data/*
 !data/Sequoia
 data/Sequoia/*
